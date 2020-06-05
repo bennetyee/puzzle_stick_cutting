@@ -66,6 +66,7 @@ def StateSpace(incr):
             else:
                 sys.stdout.write(' ')
         sys.stdout.write('\n')
+    sys.stdout.write('\n')
     for ch in range(3):
         sys.stdout.write(' ' * 4)
         for cut2 in range(0, scale):
@@ -105,7 +106,7 @@ def main(argv):
         if ns.raw:
             StateSpace(ns.increment)
         else:
-            # 10 is "slop".  we should have axis labels.
+            # 10 is "slop".  we need ~4 for axis labels.
             num_iter = math.ceil(1.0 / ns.increment) + 10
             size='%dx%d' % (num_iter, num_iter)
             try:
