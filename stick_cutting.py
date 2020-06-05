@@ -53,14 +53,14 @@ def RunManyExperiments(rng, how_many):
 # columns.
 def StateSpace(incr):
     scale=int(1.0/incr)
-    for cut1 in range(scale-1, -1, -1):
+    for cut1 in range(scale, -1, -1):
         ylabel='%4.2f' % (float(cut1)/scale)
         if ylabel[-1] == '0':
             sys.stdout.write('%3s ' % ylabel[:3])
         else:
             sys.stdout.write(' ' * 4)
 
-        for cut2 in range(0, scale):
+        for cut2 in range(0, scale+1):
             if CanMakeTriangleWithCuts(float(cut1)/scale, float(cut2)/scale):
                 sys.stdout.write('*')
             else:
@@ -69,7 +69,7 @@ def StateSpace(incr):
     sys.stdout.write('\n')
     for ch in range(3):
         sys.stdout.write(' ' * 4)
-        for cut2 in range(0, scale):
+        for cut2 in range(0, scale+1):
             xlabel='%4.2f' % (float(cut2)/scale)
             if xlabel[-1] == '0':
                 sys.stdout.write(xlabel[ch])
