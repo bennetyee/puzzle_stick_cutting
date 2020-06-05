@@ -1,7 +1,9 @@
 #!/usr/bin/python3
 
 import argparse
+import math
 import random
+import subprocess
 import sys
 
 # Textual "plot" for now
@@ -46,17 +48,35 @@ def RunManyExperiments(rng, how_many):
     num_triangles = sum([1 for _ in range(how_many) if RunOneExperiment(rng)])
     return num_triangles / how_many
 
+# For this to be useful with a small increment, the terminal emulator
+# should be set to use a small font and large number of rows and
+# columns.
 def StateSpace(incr):
     scale=int(1.0/incr)
-    for cut1 in range(0, scale):
+    for cut1 in range(scale-1, -1, -1):
+        ylabel='%4.2f' % (float(cut1)/scale)
+        if ylabel[-1] == '0':
+            sys.stdout.write('%3s ' % ylabel[:3])
+        else:
+            sys.stdout.write(' ' * 4)
+
         for cut2 in range(0, scale):
             if CanMakeTriangleWithCuts(float(cut1)/scale, float(cut2)/scale):
                 sys.stdout.write('*')
             else:
                 sys.stdout.write(' ')
         sys.stdout.write('\n')
+    for ch in range(3):
+        sys.stdout.write(' ' * 4)
+        for cut2 in range(0, scale):
+            xlabel='%4.2f' % (float(cut2)/scale)
+            if xlabel[-1] == '0':
+                sys.stdout.write(xlabel[ch])
+            else:
+                sys.stdout.write(' ')
+        sys.stdout.write('\n')
 
-def main(args):
+def main(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument('--debug', '-d', action='store_true',
                         help='generate debugging output')
@@ -69,13 +89,32 @@ def main(args):
                         help='state space plot increment')
     parser.add_argument('--seed', default=None, type=int,
                         help='seed for rng')
-    ns = parser.parse_args(args)
+    parser.add_argument('--raw', action='store_true',
+                        help='generate state_space output without spawning a window')
+    parser.add_argument('--wait', action='store_true',
+                        help='wait for a newline before exiting')
+    parser.add_argument('--font', default='-*-fixed-*-*-*-*-*-100-*-*-*-*-*-*',
+                        type=str,
+                        help='xterm font to use')
+    ns = parser.parse_args(argv[1:])
     global Debug
     Debug = ns.debug
     if ns.mode == 'monte_carlo':
         sys.stdout.write('%f\n' % RunManyExperiments(random.Random(ns.seed), ns.num_samples))
     else:
-        StateSpace(ns.increment)
+        if ns.raw:
+            StateSpace(ns.increment)
+        else:
+            # 10 is "slop".  we should have axis labels.
+            num_iter = math.ceil(1.0 / ns.increment) + 10
+            size='%dx%d' % (num_iter, num_iter)
+            try:
+                completed = subprocess.run(['xterm', '-geom', size, '-fn', ns.font, '-e', argv[0], '--mode', 'state_space', '--increment', str(ns.increment), '--raw', '--wait'])
+            except FileNotFoundError as e:
+                sys.stderr.write('Error %s\n' % e)
+                sys.stderr.write('Error running xterm. Please ensure it has been install (apt install xterm)\n')
+    if ns.wait:
+        input('Hit ENTER to close: ')
 
 if __name__ == '__main__':
-    main(sys.argv[1:])
+    main(sys.argv)
