@@ -56,13 +56,17 @@ def StateSpace(incr):
     seen_zero_last = False
     for cut1 in range(scale, -1, -1):
         ylabel='%4.2f' % (float(cut1)/scale)
+        write_tic_label = False
         if ylabel[-1] == '0':
             if not seen_zero_last:
-                sys.stdout.write('%3s ' % ylabel[:3])
+                write_tic_label = True
             seen_zero_last = True
         else:
-            sys.stdout.write(' ' * 4)
             seen_zero_last = False
+        if write_tic_label:
+            sys.stdout.write('%3s ' % ylabel[:3])
+        else:
+            sys.stdout.write(' ' * 4)
 
         for cut2 in range(0, scale+1):
             if CanMakeTriangleWithCuts(float(cut1)/scale, float(cut2)/scale):
