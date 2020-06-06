@@ -15,9 +15,9 @@ Debug=False
 def SatisfiesTriangleInequality(s0, s1, s2):
     sticks = [s0, s1, s2]
     sticks.sort()
-    return (sticks[0] + sticks[1] >= sticks[2] and
-            sticks[0] + sticks[2] >= sticks[1] and
-            sticks[1] + sticks[2] >= sticks[0])
+    return (sticks[0] + sticks[1] > sticks[2] and
+            sticks[0] + sticks[2] > sticks[1] and
+            sticks[1] + sticks[2] > sticks[0])
 
 def CanMakeTriangleWithCuts(cut0, cut1):
     if cut0 > cut1:
