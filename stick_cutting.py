@@ -53,17 +53,13 @@ def RunManyExperiments(rng, how_many):
 # columns.
 def StateSpace(incr):
     scale = int(1.0/incr)
-    seen_zero_last = False
+    threshold = 1.0
+    yincr = 0.1
     for cut1 in range(scale, -1, -1):
-        ylabel='%4.2f' % (float(cut1)/scale)
-        write_tic_label = False
-        if ylabel[-1] == '0':
-            if not seen_zero_last:
-                write_tic_label = True
-            seen_zero_last = True
-        else:
-            seen_zero_last = False
-        if write_tic_label:
+        yvalue = float(cut1) / scale
+        ylabel='%3.1f' % yvalue
+        if yvalue < threshold:
+            threshold = threshold - yincr
             sys.stdout.write('%3s ' % ylabel[:3])
         else:
             sys.stdout.write(' ' * 4)
@@ -76,17 +72,17 @@ def StateSpace(incr):
         sys.stdout.write('\n')
     sys.stdout.write('\n')
     for ch in range(3):
-        seen_zero_last = False
+        threshold = 0.0
+        xincr = 0.1
         sys.stdout.write(' ' * 4)
         for cut2 in range(0, scale+1):
-            xlabel='%4.2f' % (float(cut2)/scale)
-            if xlabel[-1] == '0':
-                if not seen_zero_last:
-                    sys.stdout.write(xlabel[ch])
-                seen_zero_last = True
+            xvalue = float(cut2) / scale
+            xlabel='%3.1f' % xvalue
+            if xvalue >= threshold:
+                threshold = threshold + xincr
+                sys.stdout.write(xlabel[ch])
             else:
                 sys.stdout.write(' ')
-                seen_zero_last = False
         sys.stdout.write('\n')
 
 def main(argv):
