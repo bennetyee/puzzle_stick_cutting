@@ -104,13 +104,11 @@ def main(argv):
                         help='generate debugging output')
     parser.add_argument('--num-samples', '-n', default=10000, type=int,
                         help='the number of Monte Carlo experiments to run')
-    parser.add_argument('--mode', '-m', choices=['monte_carlo', 'state_space'],
+    parser.add_argument('--mode', '-m', choices=['monte_carlo', 'state_space', 'text_state_space'],
                         default='monte_carlo',
-                        help='either monte_carlo experiment, or state space plot')
+                        help='run a monte_carlo experiment, or generate state space plot (or text-mode "plot")')
     parser.add_argument('--increment', '-i', default=0.01, type=float,
                         help='state space plot increment')
-    parser.add_argument('--text-plot', action='store_true',
-                        help='text-mode "plot" in a terminal window')
     parser.add_argument('--seed', default=None, type=int,
                         help='seed for rng')
     parser.add_argument('--raw', action='store_true',
@@ -125,23 +123,22 @@ def main(argv):
     Debug = ns.debug
     if ns.mode == 'monte_carlo':
         sys.stdout.write('%f\n' % RunManyExperiments(random.Random(ns.seed), ns.num_samples))
-    else:
-        if ns.text_plot:
-            if ns.raw:
-                TextStateSpace(ns.increment)
-            else:
-                # 10 is "slop".  we need ~4 for axis labels.
-                num_iter = math.ceil(1.0 / ns.increment) + 10
-                size='%dx%d' % (num_iter, num_iter)
-                try:
-                    completed = subprocess.run(['xterm', '-geom', size, '-fn', ns.font, '-e', argv[0], '--mode', 'state_space', '--increment', str(ns.increment), '--raw', '--wait', '--text-plot'])
-                except FileNotFoundError as e:
-                    sys.stderr.write('Error %s\n' % e)
-                    sys.stderr.write('Error running xterm. Please ensure it has been install (apt install xterm)\n')
-            if ns.wait:
-                input('Hit ENTER to close: ')
+    elif ns.mode == 'text_state_space':
+        if ns.raw:
+            TextStateSpace(ns.increment)
         else:
-            PlotStateSpace(ns.increment)
+            # 10 is "slop".  we need ~4 for axis labels.
+            num_iter = math.ceil(1.0 / ns.increment) + 10
+            size='%dx%d' % (num_iter, num_iter)
+            try:
+                completed = subprocess.run(['xterm', '-geom', size, '-fn', ns.font, '-e', argv[0], '--mode', 'text_state_space', '--increment', str(ns.increment), '--raw', '--wait'])
+            except FileNotFoundError as e:
+                sys.stderr.write('Error %s\n' % e)
+                sys.stderr.write('Error running xterm. Please ensure it has been install (apt install xterm)\n')
+        if ns.wait:
+            input('Hit ENTER to close: ')
+    else:
+        PlotStateSpace(ns.increment)
 
 if __name__ == '__main__':
     main(sys.argv)
