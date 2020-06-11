@@ -6,6 +6,8 @@ that a state-space based analysis is relatively easy, and those who
 are familar with that kind of approach wouldn't need to use this
 applied mathematics style approach.  This is intended for beginners.
 
+The code also generates the state-space graph to help build intuition.
+
 ## Stick Cutting
 
 The puzzle is as follows:
