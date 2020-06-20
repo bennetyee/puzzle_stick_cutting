@@ -11,7 +11,7 @@ it will print out a graph in a terminal window (you must have `xterm`
 installed) to show you what combinations of first and second cut
 positions would result in three sticks that can form a triangle.  With
 `--mode state_space`, you get a graphical representation (you can
-resize it to ensure that the axes are the same length).
+resize it to make it bigger, etc).
 
 The output will look something like the state-space plot in the figure.
 
