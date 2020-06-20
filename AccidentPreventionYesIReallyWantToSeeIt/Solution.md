@@ -26,9 +26,9 @@ equivalently, we make special rulers such that the stick is of length
 
 Next, let us consider what has to occur if we are to _not_ be able to
 form a triangle.  In order for the triangle inequality to be violated,
-one of the sticks must be of length 1/2 (plus 𝜀 > 0) -- the remaining
-two sticks, however the remaining material is to be distributed
-between them, cannot close the gap.
+one of the sticks must be of length 1/2 plus 𝜀 or longer -- the
+remaining two sticks, however the remaining material is to be
+distributed between them, cannot close the gap.
 
 Suppose in addition to the stick being cut A we had an auxillary stick
 B such that the length of B is exactly half that of A.  After we make
