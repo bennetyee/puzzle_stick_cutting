@@ -36,9 +36,8 @@ two cuts on A, none of the resulting 3 fragments of A can be longer
 than B.  This is why when the position of the first cut is at _x_ and
 0 ≤ _x_ ≤ ½, the second cut at _y_ must satisfy:
 
-_y_ ≤ _x_ + ½
-
-½ ≤ _y_
+* _y_ ≤ _x_ + ½
+* ½ ≤ _y_
 
 
 This yields the triangle in the upper left of the plot with vertices
