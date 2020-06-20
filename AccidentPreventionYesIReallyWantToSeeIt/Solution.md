@@ -32,9 +32,9 @@ distributed between them, cannot close the gap.
 
 Suppose in addition to the stick being cut A we had an auxillary stick
 B such that the length of B is exactly half that of A.  After we make
-two cuts on A, none of the results can be longer than B.  This is why
-when the position of the first cut is at _x_ and 0 ≤ _x_ ≤ ½, the
-second cut at _y_ must satisfy:
+two cuts on A, none of the resulting 3 fragments of A can be longer
+than B.  This is why when the position of the first cut is at _x_ and
+0 ≤ _x_ ≤ ½, the second cut at _y_ must satisfy:
 
 _y_ ≤ _x_ + ½
 
