@@ -7,9 +7,10 @@ import subprocess
 import sys
 
 import matplotlib.pyplot as plt
+# from matplotlib.backends.backend_pdf import PdfPages
 import numpy as np
 
-Debug=False
+options=None
 
 def SatisfiesTriangleInequality(s0, s1, s2):
     sticks = [s0, s1, s2]
@@ -29,12 +30,12 @@ def CanMakeTriangleWithCuts(cut0, cut1):
     s1 = cut1 - cut0
     s2 = 1.0 - cut1
 
-    if Debug:
+    if options.debug:
         sys.stdout.write('cuts    %f, %f; ' % (cut0, cut1))
         sys.stdout.write('lengths %f, %f, %f: ' % (s0, s1, s2))
 
     can_form_triangle = SatisfiesTriangleInequality(s0, s1, s2)
-    if Debug:
+    if options.debug:
         sys.stdout.write('%s\n' % str(can_form_triangle))
     return can_form_triangle
 
@@ -95,8 +96,17 @@ def PlotStateSpace(incr):
             if CanMakeTriangleWithCuts(xf, yf):
                 xs.append(xf)
                 ys.append(yf)
+    plt.figure()
+    plt.clf()
+    plt.axes(aspect='equal')
+    plt.title('Can A Triangle Be Formed?')
     plt.scatter(xs, ys, 1, marker=',')
-    plt.show()
+    plt.xlabel('Position of first cut')
+    plt.ylabel('Position of second cut')
+    if options.file is not None:
+        plt.savefig(options.file)
+    else:
+        plt.show()
 
 def main(argv):
     parser = argparse.ArgumentParser()
@@ -107,6 +117,8 @@ def main(argv):
     parser.add_argument('--mode', '-m', choices=['monte_carlo', 'state_space', 'text_state_space'],
                         default='monte_carlo',
                         help='run a monte_carlo experiment, or generate state space plot (or text-mode "plot")')
+    parser.add_argument('--file', default=None, type=str,
+                        help='Generate output in <filename> when in state_space mode; use pdf, svg, pnf suffix to specify file format')
     parser.add_argument('--increment', '-i', default=0.01, type=float,
                         help='state space plot increment')
     parser.add_argument('--seed', default=None, type=int,
@@ -118,27 +130,26 @@ def main(argv):
     parser.add_argument('--font', default='-*-fixed-*-*-*-*-*-100-*-*-*-*-*-*',
                         type=str,
                         help='xterm font to use')
-    ns = parser.parse_args(argv[1:])
-    global Debug
-    Debug = ns.debug
-    if ns.mode == 'monte_carlo':
-        sys.stdout.write('%f\n' % RunManyExperiments(random.Random(ns.seed), ns.num_samples))
-    elif ns.mode == 'text_state_space':
-        if ns.raw:
-            TextStateSpace(ns.increment)
+    global options
+    options = parser.parse_args(argv[1:])
+    if options.mode == 'monte_carlo':
+        sys.stdout.write('%f\n' % RunManyExperiments(random.Random(options.seed), options.num_samples))
+    elif options.mode == 'text_state_space':
+        if options.raw:
+            TextStateSpace(options.increment)
         else:
             # 10 is "slop".  we need ~4 for axis labels.
-            num_iter = math.ceil(1.0 / ns.increment) + 10
+            num_iter = math.ceil(1.0 / options.increment) + 10
             size='%dx%d' % (num_iter, num_iter)
             try:
-                completed = subprocess.run(['xterm', '-geom', size, '-fn', ns.font, '-e', argv[0], '--mode', 'text_state_space', '--increment', str(ns.increment), '--raw', '--wait'])
+                completed = subprocess.run(['xterm', '-geom', size, '-fn', options.font, '-e', argv[0], '--mode', 'text_state_space', '--increment', str(options.increment), '--raw', '--wait'])
             except FileNotFoundError as e:
                 sys.stderr.write('Error %s\n' % e)
                 sys.stderr.write('Error running xterm. Please ensure it has been install (apt install xterm)\n')
-        if ns.wait:
+        if options.wait:
             input('Hit ENTER to close: ')
     else:
-        PlotStateSpace(ns.increment)
+        PlotStateSpace(options.increment)
 
 if __name__ == '__main__':
     main(sys.argv)

@@ -10,6 +10,8 @@ The code also generates the state-space graph to help build intuition.
 
 ## Stick Cutting
 
+### Puzzle
+
 The puzzle is as follows:
 
 Given a mathematical stick (infinitely thin, so modeled as a line
@@ -21,3 +23,8 @@ What is the probability that the three sticks can be laid down
 end-to-end to form a triangle?
 
 (Alternatively, pick two points at which to install a hinge, and ...)
+
+### Solution
+
+To see the solution, follow [this
+link](AccidentPreventionYesIReallyWantToSeeIt/Solution.md).
