@@ -26,13 +26,13 @@ The output will look something like the state-space plot in the figure.
 
 ![State Space Plot](out.png)
 
-Let us go through what it represents.
+Let us go through why the figure is the way it is.
 
-First, let us consider what has to occur if we are to _not_ be able to
-form a triangle.  In order for the triangle inequality to be violated,
-one of the cut sticks must be of length 1/2 plus 𝜀 or longer -- the
-other two sticks, however the remaining material is to be distributed
-between them, cannot close the gap.
+What has to occur if we are to _not_ be able to form a triangle?  In
+order for the triangle inequality to be violated, one of the cut
+sticks must be of length 1/2 plus 𝜀 or longer -- the other two sticks,
+however the remaining material is to be distributed between them,
+cannot close the gap.
 
 Let the position of the first cut be denoted by _x_.  This means that
 when and 0 ≤ _x_ ≤ ½, the second cut at _y_ must satisfy:
@@ -42,8 +42,14 @@ when and 0 ≤ _x_ ≤ ½, the second cut at _y_ must satisfy:
 * ½ ≤ _y_
 
 
-This yields the triangle in the upper left of the plot with vertices
+Satisfying these constraints means that none of the 3 stick pieces
+will be longer than ½.
+
+This explains the triangle in the upper left of the plot with vertices
 (0, ½), (½, ½), and (½, 1).
 
 A similar line of reasoning for ½ ≤ _x_ ≤ 1, which yields the triangle
 in the lower right with vertices (½, ½), (½, 0), and (1, ½).
+
+For _x_ = ½, _y_ can be any value between 0 and 1 and we would end up
+with a degenerate triangle.
