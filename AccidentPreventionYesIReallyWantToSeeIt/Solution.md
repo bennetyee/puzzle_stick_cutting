@@ -37,6 +37,7 @@ than B.  This is why when the position of the first cut is at _x_ and
 0 ≤ _x_ ≤ ½, the second cut at _y_ must satisfy:
 
 * _y_ ≤ _x_ + ½
+
 * ½ ≤ _y_
 
 
